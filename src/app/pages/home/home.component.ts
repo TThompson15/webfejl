@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-home',
-  imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  standalone: true,
+  template: `
+    <h2>Ez itt a home page xdd</h2>
+    <p>Használd a felső menüt a navigációhoz.</p>
+  `
 })
-export class HomeComponent {
-
-}
+export class HomeComponent {}
