@@ -1,54 +1,56 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collectionData, collection, addDoc } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Firestore, collection, collectionData, query, where, addDoc } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
+import { User } from 'firebase/auth';
+import { Observable, of, switchMap, map } from 'rxjs';
 
 export interface GasReading {
   id?: string;
   date: any;
   meterValue: number;
+  userId?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class GasReadingService {
-  private readingsSubject = new BehaviorSubject<GasReading[]>([]);
-  readings$ = this.readingsSubject.asObservable();
+  readings$: Observable<GasReading[]>;
 
-  constructor(private firestore: Firestore) {
-    this.loadReadings();
-  }
-
-  loadReadings(): void {
-    const readingsRef = collection(this.firestore, 'readings');
-    collectionData(readingsRef, { idField: 'id' })
-      .pipe(
-        map((data: any[]) => 
-          data
-            .map(doc => ({
-              id: doc.id,
-              date: new Date(doc.date.seconds * 1000),
-              meterValue: doc.meterValue
-            }))
-            .sort((a, b) => a.meterValue - b.meterValue)
-        )
-      )
-      .subscribe((convertedData: GasReading[]) => {
-        this.readingsSubject.next(convertedData);
-      });
+  constructor(
+    private firestore: Firestore,
+    private authService: AuthService
+  ) {
+    this.readings$ = this.authService.currentUser$.pipe(
+      switchMap(user => {
+        if (!user) return of([]);
+        const readingsRef = collection(this.firestore, 'readings');
+        const q = query(readingsRef, where('userId', '==', user.uid));
+        return collectionData(q, { idField: 'id' }).pipe(
+          map((docs: any[]) =>
+            docs
+              .map(doc => ({
+                id: doc.id,
+                date: new Date(doc.date?.seconds * 1000),
+                meterValue: doc.meterValue,
+                userId: doc.userId
+              }))
+              .sort((a, b) => a.meterValue - b.meterValue)
+          )
+        );
+      })
+    );
   }
 
   addReading(reading: GasReading) {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) return Promise.reject('Nincs bejelentkezett felhasználó.');
+
     const readingsRef = collection(this.firestore, 'readings');
-    return addDoc(readingsRef, { 
-      ...reading, 
-      date: new Date()
-    }).then(() => {
-      this.loadReadings();
-      console.log('Adat sikeresen hozzáadva.');
-    }).catch((error) => {
-      console.error('Hiba az adat hozzáadásakor:', error);
+    return addDoc(readingsRef, {
+      ...reading,
+      date: new Date(),
+      userId: currentUser.uid
     });
   }
 }

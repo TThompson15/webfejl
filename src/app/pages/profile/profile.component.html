@@ -1,4 +1,4 @@
-<div>
-    <h1>Üdv néked Arthur király!</h1>
-    <p>profil oldal</p>
+<h2>Profil</h2>
+<div *ngIf="user">
+  <p><strong>Email:</strong> {{ user.email }}</p>
 </div>
