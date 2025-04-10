@@ -1,4 +1,42 @@
-<h2>Profil</h2>
-<div *ngIf="user">
-  <p><strong>Email:</strong> {{ user.email }}</p>
+<h2>Profilom</h2>
+
+<div *ngIf="user; else loading">
+  <form *ngIf="editMode; else viewMode" (ngSubmit)="saveChanges()" #form="ngForm" novalidate>
+    <label>Email: {{ user.email }}</label><br>
+  
+    <label>Teljes név:</label>
+    <input type="text" [(ngModel)]="user.displayName" name="displayName" required />
+    <div *ngIf="user.displayName && user.displayName.length < 6" style="color:red;">Minimum 6 karakter</div>
+  
+    <label>Lakcím:</label>
+    <app-address-autocomplete (addressSelected)="user.address = $event"></app-address-autocomplete>
+    <div *ngIf="!user.address" style="color:red;">Kötelező mező</div>
+  
+    <label>Telefonszám:</label>
+    <input type="tel" [(ngModel)]="user.phone" name="phone" required />
+    <div *ngIf="user.phone && !isPhoneValid(user.phone)" style="color:red;">
+      Telefonszám hibás (pl. 06301234567)
+    </div>
+  
+    <button type="submit">Mentés</button>
+    <button type="button" (click)="editMode = false">Mégse</button>
+    <div *ngIf="errorMessage" style="color:red; margin-top:10px">{{ errorMessage }}</div>
+  </form>
+  
+
+  <ng-template #viewMode>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Teljes név:</strong> {{ user.displayName || '' | capitalize }}</p>
+    <p><strong>Fiók létrehozva:</strong> {{ user.createdAt | date:'longDate' }}</p>
+    <p><strong>Lakcím:</strong> {{ user.address || 'Nincs megadva' }}</p>
+    <p><strong>Telefonszám:</strong> {{ user.phone || '' | telFormat }}</p>
+
+    <button (click)="enableEdit()">Szerkesztés</button>
+  </ng-template>
+
+  <p *ngIf="saveMessage" style="color: green">{{ saveMessage }}</p>
 </div>
+
+<ng-template #loading>
+  <p>Betöltés...</p>
+</ng-template>

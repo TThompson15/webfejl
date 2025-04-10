@@ -1,4 +1,12 @@
-<div>
-    <h1>Gázóra állás bejelentése</h1>
-    <p>Itt lehet majd bejelenteni az aktuális állást.</p>
-</div>
+<h2>Gázóra lejelentések</h2>
+<form (ngSubmit)="addReading()" #readingForm="ngForm">
+  <input type="number" [(ngModel)]="newMeterValue" name="meterValue" placeholder="Óraállás" required />
+  <button type="submit">Hozzáadás</button>
+</form>
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+<ul>
+  <li *ngFor="let reading of readings$ | async">
+    Dátum: {{ reading.date | date:'short' }} -
+    Óraállás: {{ reading.meterValue }}
+  </li>
+</ul>

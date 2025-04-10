@@ -4,34 +4,33 @@ import { GasReadingService, GasReading } from '../../services/gas-reading.servic
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { LimitService } from '../../services/limit.service';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
+
 @Component({
   selector: 'app-report',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-    <h2>Gázóra lejelentések</h2>
-    <form (ngSubmit)="addReading()" #readingForm="ngForm">
-      <input type="number" [(ngModel)]="newMeterValue" name="meterValue" placeholder="Óraállás" required />
-      <button type="submit">Hozzáadás</button>
-    </form>
-    <div *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</div>
-    <ul>
-      <li *ngFor="let reading of readings$ | async">
-        Dátum: {{ reading.date | date:'short' }} - 
-        Óraállás: {{ reading.meterValue }}
-      </li>
-    </ul>
-  `
+  templateUrl: './report.component.html',
+  styleUrls: ['./report.component.scss']
 })
+
 export class ReportComponent implements OnInit {
   readings$: Observable<GasReading[]>;
   newMeterValue!: number;
   errorMessage: string = '';
   lastMeterValue: number = 0;
 
-  constructor(private gasReadingService: GasReadingService) {
+  constructor(
+    private gasReadingService: GasReadingService,
+    private authService: AuthService,
+    private limitService: LimitService,
+    private toastService: ToastService
+  ) {
     this.readings$ = this.gasReadingService.readings$;
   }
+  
 
   ngOnInit(): void {
     this.gasReadingService.readings$.subscribe(readings => {
@@ -46,19 +45,39 @@ export class ReportComponent implements OnInit {
       this.errorMessage = `Az óraállás nem lehet kisebb vagy egyenlő az utolsó értéknél (${this.lastMeterValue}).`;
       return;
     }
+  
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      this.errorMessage = 'Nincs bejelentkezett felhasználó.';
+      return;
+    }
+  
+    this.limitService.getLimitForUser(currentUser.uid).then(limit => {
+      if (this.newMeterValue < limit.minValue || this.newMeterValue > limit.maxValue) {
+        this.errorMessage = `Az óraállásnak ${limit.minValue} és ${limit.maxValue} között kell lennie.`;
+        return;
+      }
+  
+      const newReading: GasReading = {
+        meterValue: this.newMeterValue,
+        date: new Date()
+      };
+  
+      this.gasReadingService.addReading(newReading).then(() => {
+        this.errorMessage = '';
+        this.newMeterValue = 0;
+        
+        this.toastService.show({
+          type: 'success',
+          message: 'Diktálás sikeres!',
+          timestamp: new Date()
+        });
 
-    const newReading: GasReading = {
-      meterValue: this.newMeterValue,
-      date: new Date()
-    };
-
-    this.gasReadingService.addReading(newReading).then(() => {
-      this.errorMessage = '';
-      this.newMeterValue = 0;
-      console.log('Adat sikeresen hozzáadva.');
-    }).catch((error) => {
-      console.error('Hiba az adat hozzáadásakor:', error);
-      this.errorMessage = 'Hiba az adat hozzáadásakor.';
+      }).catch((error) => {
+        console.error('Hiba az adat hozzáadásakor:', error);
+        this.errorMessage = 'Hiba az adat hozzáadásakor.';
+      });
     });
   }
+  
 }

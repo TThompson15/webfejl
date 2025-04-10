@@ -9,11 +9,18 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { environment } from './environments/environment';
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeHu from '@angular/common/locales/hu';
+
+registerLocaleData(localeHu);
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    {provide: LOCALE_ID, useValue: 'hu'}
   ]
 }).catch(err => console.error(err));

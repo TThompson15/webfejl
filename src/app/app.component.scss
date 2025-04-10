@@ -1,0 +1,40 @@
+:host {
+    display: block;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+  }
+  
+
+.alert-success {
+    background-color: #4caf50 !important;
+    color: #fff !important;
+  }
+  
+  .alert-error {
+    background-color: #f44336 !important;
+    color: #fff !important;
+  }
+  
+  .alert-info {
+    background-color: #2196f3 !important;
+    color: #fff !important;
+  }
+  
+
+  :root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+  }
+  
+  body.dark-theme {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
