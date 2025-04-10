@@ -13,6 +13,8 @@ import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeHu from '@angular/common/locales/hu';
 
+import { provideAnimations } from '@angular/platform-browser/animations';
+
 registerLocaleData(localeHu);
 
 bootstrapApplication(AppComponent, {
@@ -21,6 +23,7 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideAnimations(),
     {provide: LOCALE_ID, useValue: 'hu'}
   ]
 }).catch(err => console.error(err));

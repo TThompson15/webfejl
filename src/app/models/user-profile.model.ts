@@ -6,4 +6,3 @@ export interface UserProfile {
     address?: string;
     phone?: string;
   }
-  

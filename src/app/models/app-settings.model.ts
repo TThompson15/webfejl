@@ -2,6 +2,5 @@
 export interface AppSettings {
     notificationsEnabled: boolean;
     theme: 'light' | 'dark';
-    language: 'hu' | 'en';    
+    language: 'hu' | 'en';
 }
-  

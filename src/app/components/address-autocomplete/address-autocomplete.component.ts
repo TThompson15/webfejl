@@ -20,7 +20,7 @@ declare const google: any;
   `]
 })
 export class AddressAutocompleteComponent implements AfterViewInit {
-  
+
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   @Output() addressSelected = new EventEmitter<string>();
 

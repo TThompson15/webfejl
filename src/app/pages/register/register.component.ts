@@ -7,17 +7,18 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { UserProfile } from '../../models/user-profile.model';
 
-import { updateProfile } from 'firebase/auth'; // EZT ADD HOZZÁ
+import { updateProfile } from 'firebase/auth';
 
 import { ToastService } from '../../services/toast.service';
 
 import { AddressAutocompleteComponent } from '../../components/address-autocomplete/address-autocomplete.component';
+import { MaterialModule } from '../../shared/material/material.module';
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddressAutocompleteComponent],
+  imports: [CommonModule, FormsModule, AddressAutocompleteComponent, MaterialModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
@@ -27,10 +28,10 @@ export class RegisterComponent {
   email = '';
   password = '';
   displayName = '';
-  address = '';      // ➕
-  phone = '';        // ➕
+  address = '';
+  phone = '';
   error: string | null = null;
-  
+
 
   constructor(
     private authService: AuthService,
@@ -38,17 +39,16 @@ export class RegisterComponent {
     private router: Router,
     private toastService: ToastService
   ) {}
-  
+
   isPasswordValid(pwd: string): boolean {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=\-{}[\]|:;"'<>,.?/]).{8,}$/.test(pwd);
   }
-  
+
   isPhoneValid(phone: string): boolean {
     return /^(06|\+36)(20|30|70|31|50|1)\d{7}$/.test(phone);
   }
 
   register() {
-  // 💡 MEZŐ VALIDÁLÁSOK
   if (this.displayName.length < 6) {
     this.error = 'A teljes név legalább 6 karakter hosszú legyen.';
     return;
@@ -69,7 +69,6 @@ export class RegisterComponent {
     return;
   }
 
-  // ✅ Ha minden mező érvényes, mehet a regisztráció
   this.authService.register(this.email, this.password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -102,5 +101,5 @@ export class RegisterComponent {
     });
 }
 
-  
+
 }

@@ -7,8 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class CapitalizePipe implements PipeTransform {
   transform(value: string): string {
     if (!value) return '';
-    
-    // Több szóból álló string kezelése
+
     return value
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())

@@ -3,4 +3,3 @@ export interface AlertMessage {
     message: string;
     timestamp: Date;
   }
-  

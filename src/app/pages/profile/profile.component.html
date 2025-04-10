@@ -1,42 +1,61 @@
-<h2>Profilom</h2>
+<div class="profile-wrapper">
+  <mat-card class="profile-card" *ngIf="user; else loading">
+    <h2>Profilom</h2>
 
-<div *ngIf="user; else loading">
-  <form *ngIf="editMode; else viewMode" (ngSubmit)="saveChanges()" #form="ngForm" novalidate>
-    <label>Email: {{ user.email }}</label><br>
-  
-    <label>Teljes név:</label>
-    <input type="text" [(ngModel)]="user.displayName" name="displayName" required />
-    <div *ngIf="user.displayName && user.displayName.length < 6" style="color:red;">Minimum 6 karakter</div>
-  
-    <label>Lakcím:</label>
-    <app-address-autocomplete (addressSelected)="user.address = $event"></app-address-autocomplete>
-    <div *ngIf="!user.address" style="color:red;">Kötelező mező</div>
-  
-    <label>Telefonszám:</label>
-    <input type="tel" [(ngModel)]="user.phone" name="phone" required />
-    <div *ngIf="user.phone && !isPhoneValid(user.phone)" style="color:red;">
-      Telefonszám hibás (pl. 06301234567)
-    </div>
-  
-    <button type="submit">Mentés</button>
-    <button type="button" (click)="editMode = false">Mégse</button>
-    <div *ngIf="errorMessage" style="color:red; margin-top:10px">{{ errorMessage }}</div>
-  </form>
-  
+    <form *ngIf="editMode; else viewMode" (ngSubmit)="saveChanges()" #form="ngForm" novalidate>
 
-  <ng-template #viewMode>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Teljes név:</strong> {{ user.displayName || '' | capitalize }}</p>
-    <p><strong>Fiók létrehozva:</strong> {{ user.createdAt | date:'longDate' }}</p>
-    <p><strong>Lakcím:</strong> {{ user.address || 'Nincs megadva' }}</p>
-    <p><strong>Telefonszám:</strong> {{ user.phone || '' | telFormat }}</p>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [value]="user.email" disabled />
+      </mat-form-field>
 
-    <button (click)="enableEdit()">Szerkesztés</button>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Teljes név</mat-label>
+        <input matInput type="text" [(ngModel)]="user.displayName" name="displayName" required />
+        <mat-error *ngIf="user.displayName && user.displayName.length < 6">
+          Minimum 6 karakter
+        </mat-error>
+      </mat-form-field>
+
+      <div class="autocomplete-wrapper">
+        <app-address-autocomplete (addressSelected)="user.address = $event"></app-address-autocomplete>
+        <mat-error *ngIf="!user.address">Lakcím megadása kötelező</mat-error>
+      </div>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Telefonszám</mat-label>
+        <input matInput type="tel" [(ngModel)]="user.phone" name="phone" required />
+        <mat-error *ngIf="user.phone && !isPhoneValid(user.phone)">
+          Telefonszám hibás (pl. 06301234567)
+        </mat-error>
+      </mat-form-field>
+
+      <div class="button-row">
+        <button mat-raised-button color="primary" type="submit">Mentés</button>
+        <button mat-button type="button" (click)="editMode = false">Mégse</button>
+      </div>
+
+      <mat-error *ngIf="errorMessage" class="error-message">{{ errorMessage }}</mat-error>
+    </form>
+
+    <ng-template #viewMode>
+      <mat-list>
+        <mat-list-item><strong>Email:</strong> {{ user.email }}</mat-list-item>
+        <mat-list-item><strong>Teljes név:</strong> {{ user.displayName || '' | capitalize }}</mat-list-item>
+        <mat-list-item><strong>Fiók létrehozva:</strong> {{ user.createdAt | date:'longDate' }}</mat-list-item>
+        <mat-list-item><strong>Lakcím:</strong> {{ user.address || 'Nincs megadva' }}</mat-list-item>
+        <mat-list-item><strong>Telefonszám:</strong> {{ user.phone || '' | telFormat }}</mat-list-item>
+      </mat-list>
+
+      <button mat-raised-button color="primary" (click)="enableEdit()">Szerkesztés</button>
+    </ng-template>
+
+    <p *ngIf="saveMessage" class="success-message">{{ saveMessage }}</p>
+  </mat-card>
+
+  <ng-template #loading>
+    <mat-card class="profile-card">
+      <p>Betöltés...</p>
+    </mat-card>
   </ng-template>
-
-  <p *ngIf="saveMessage" style="color: green">{{ saveMessage }}</p>
 </div>
-
-<ng-template #loading>
-  <p>Betöltés...</p>
-</ng-template>

@@ -9,7 +9,7 @@ export class ToastService {
   show(message: AlertMessage) {
     this.snackBar.open(message.message, 'OK', {
       duration: 3000,
-      panelClass: [`alert-${message.type}`] // pl. alert-success, alert-error
+      panelClass: [`alert-${message.type}`]
     });
   }
 }

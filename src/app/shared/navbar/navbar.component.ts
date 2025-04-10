@@ -10,6 +10,8 @@ import { ToastService } from '../../services/toast.service';
 import { SettingsService } from '../../services/settings.service';
 import { AppSettings } from '../../models/app-settings.model';
 
+import { MaterialModule } from '../material/material.module';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -17,7 +19,8 @@ import { AppSettings } from '../../models/app-settings.model';
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    MaterialModule
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
@@ -52,7 +55,6 @@ export class NavbarComponent {
 
     this.settingsService.saveSettings(updated);
 
-    // először eltávolítjuk a régi class-t, majd hozzáadjuk az újat
     document.body.classList.remove('dark-theme', 'light-theme');
     document.body.classList.add(`${newTheme}-theme`);
   }

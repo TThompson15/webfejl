@@ -9,13 +9,15 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
 
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'report', component: ReportComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent, data: { animation: 'LoginPage' } },
+  { path: 'register', component: RegisterComponent, data: { animation: 'RegisterPage' } },
+
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { animation: 'HomePage' } },
+  { path: 'report', component: ReportComponent, canActivate: [AuthGuard], data: { animation: 'ReportPage' } },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'ProfilePage' } },
 
   { path: '**', redirectTo: 'home' }
 ];
+
 

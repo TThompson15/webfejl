@@ -1,20 +1,21 @@
 <mat-toolbar color="primary" class="navbar">
-  <span class="navbar-title">Gas Meter App</span>
-  <nav class="navbar-links">
-    <button mat-button (click)="toggleTheme()">🌗 Téma váltás</button>
+  <span class="navbar-title" routerLink="/">Gas Meter App</span>
 
-    <!-- Csak ha BE VAN jelentkezve -->
-    <ng-container *ngIf="isLoggedIn; else guestNav">
-      <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
-      <a mat-button routerLink="/report" routerLinkActive="active">Report</a>
-      <a mat-button routerLink="/profile" routerLinkActive="active">Profil</a>
-      <button mat-button (click)="logout()">Kijelentkezés</button>
-    </ng-container>
+  <span class="spacer"></span>
 
-    <!-- Ha NINCS bejelentkezve -->
-    <ng-template #guestNav>
-      <a mat-button routerLink="/login" routerLinkActive="active">Bejelentkezés</a>
-      <a mat-button routerLink="/register" routerLinkActive="active">Regisztráció</a>
-    </ng-template>
-  </nav>
+  <button mat-icon-button (click)="toggleTheme()" matTooltip="Téma váltás">
+    <mat-icon>dark_mode</mat-icon>
+  </button>
+
+  <ng-container *ngIf="isLoggedIn; else guestNav">
+    <a mat-button routerLink="/home" routerLinkActive="active">Kezdőlap</a>
+    <a mat-button routerLink="/report" routerLinkActive="active">Diktálás</a>
+    <a mat-button routerLink="/profile" routerLinkActive="active">Profil</a>
+    <button mat-button (click)="logout()">Kijelentkezés</button>
+  </ng-container>
+
+  <ng-template #guestNav>
+    <a mat-button routerLink="/login" routerLinkActive="active">Bejelentkezés</a>
+    <a mat-button routerLink="/register" routerLinkActive="active">Regisztráció</a>
+  </ng-template>
 </mat-toolbar>

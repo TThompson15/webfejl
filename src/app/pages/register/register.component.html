@@ -1,58 +1,49 @@
-<div class="register-container">
-  <div class="register-card">
+<div class="register-wrapper">
+  <mat-card class="register-card">
     <h2>Regisztráció</h2>
 
     <form (ngSubmit)="register()" #registerForm="ngForm" novalidate>
-      <input
-        type="text"
-        name="displayName"
-        [(ngModel)]="displayName"
-        required
-        minlength="6"
-        placeholder="Teljes név"
-      />
-      <div *ngIf="registerForm.submitted && displayName.length < 6" class="error">
-        Minimum 6 karakter
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Teljes név</mat-label>
+        <input matInput type="text" name="displayName" [(ngModel)]="displayName" required minlength="6" />
+        <mat-error *ngIf="registerForm.submitted && displayName.length < 6">
+          Minimum 6 karakter
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" name="email" [(ngModel)]="email" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Jelszó</mat-label>
+        <input matInput type="password" name="password" [(ngModel)]="password" required />
+        <mat-error *ngIf="registerForm.submitted && !isPasswordValid(password)">
+          A jelszónak legalább 8 karakterből kell állnia, kis- és nagybetűt, számot, speciális karaktert is tartalmaznia kell.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Telefonszám</mat-label>
+        <input matInput type="tel" name="phone" [(ngModel)]="phone" required />
+        <mat-error *ngIf="registerForm.submitted && !isPhoneValid(phone)">
+          Telefonszám formátum: 06 vagy +36, érvényes körzetszám, 7 számjegy.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="autocomplete-wrapper">
+        <app-address-autocomplete (addressSelected)="address = $event"></app-address-autocomplete>
+        <mat-error *ngIf="registerForm.submitted && !address">
+          Lakcím kiválasztása kötelező.
+        </mat-error>
       </div>
 
-      <input
-        type="email"
-        name="email"
-        [(ngModel)]="email"
-        required
-        placeholder="Email"
-      />
-
-      <input
-        type="password"
-        name="password"
-        [(ngModel)]="password"
-        required
-        placeholder="Jelszó"
-      />
-      <div *ngIf="registerForm.submitted && !isPasswordValid(password)" class="error">
-        A jelszónak legalább 8 karakterből kell állnia, kis- és nagybetűt, számot, speciális karaktert is tartalmaznia kell.
-      </div>
-
-      <input
-        type="tel"
-        name="phone"
-        [(ngModel)]="phone"
-        required
-        placeholder="Telefonszám (pl. 06301234567)"
-      />
-      <div *ngIf="registerForm.submitted && !isPhoneValid(phone)" class="error">
-        Telefonszám formátum: 06 vagy +36, érvényes körzetszám, 7 számjegy.
-      </div>
-
-      <app-address-autocomplete (addressSelected)="address = $event"></app-address-autocomplete>
-      <div *ngIf="registerForm.submitted && !address" class="error">
-        Lakcím kiválasztása kötelező.
-      </div>
-
-      <button type="submit">Regisztrál</button>
+      <button mat-raised-button color="primary" type="submit" class="full-width">
+        Regisztrál
+      </button>
     </form>
 
-    <div *ngIf="error" class="error">{{ error }}</div>
-  </div>
+    <mat-error *ngIf="error" class="error-message">{{ error }}</mat-error>
+  </mat-card>
 </div>

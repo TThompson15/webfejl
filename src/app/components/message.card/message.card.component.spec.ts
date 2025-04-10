@@ -1,20 +1,18 @@
-// ez már nincs használva, de itt hagyom, lehet majd kell még...
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuComponent } from './menu.component';
+import { MessageCardComponent } from './message.card.component';
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+describe('MessageCardComponent', () => {
+  let component: MessageCardComponent;
+  let fixture: ComponentFixture<MessageCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuComponent]
+      imports: [MessageCardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MenuComponent);
+    fixture = TestBed.createComponent(MessageCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

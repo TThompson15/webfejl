@@ -1,85 +1,62 @@
-:host {
-    display: block;
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border-radius: 12px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
-  }
-  
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  padding: 0 1rem;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 800px;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #2196f3;
+
   h2 {
     text-align: center;
+    color: #1976d2;
     margin-bottom: 2rem;
-  }
-  
-  form label,
-  p {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #444;
-  }
-  
-  form input {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    transition: border-color 0.2s ease;
-  }
-  
-  form input:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-  
-  app-address-autocomplete {
-    display: block;
-    margin-bottom: 1rem;
-  }
-  
-  button {
-    padding: 10px 16px;
-    margin-right: 8px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    transition: background-color 0.2s ease;
-  }
-  
-  button[type="button"] {
-    background-color: #6c757d;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  button[type="button"]:hover {
-    background-color: #5a6268;
-  }
-  
-  p strong {
     font-weight: 600;
   }
-  
-  .success-message {
-    color: green;
-    font-weight: 500;
-    margin-top: 1rem;
+}
+
+mat-form-field.full-width {
+  width: 100%;
+  margin-bottom: 2rem;
+
+  .mat-input-element {
+    color: #0d47a1;
   }
-  
-  .error-message {
-    color: red;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+
+  .mat-form-field-label {
+    color: #1976d2;
   }
-  
+}
+
+.autocomplete-wrapper {
+  margin-bottom: 2rem;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.success-message {
+  margin-top: 1.5rem;
+  color: #2e7d32;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  margin-top: 1.5rem;
+  color: #d32f2f;
+  text-align: center;
+  font-weight: 500;
+}
+

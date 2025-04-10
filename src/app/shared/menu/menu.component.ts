@@ -1,3 +1,5 @@
+// ez már nincs használva, de itt hagyom, lehet majd kell még...
+
 import { Component } from '@angular/core';
 
 @Component({

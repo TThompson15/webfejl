@@ -8,11 +8,12 @@ import { TelFormatPipe } from '../../pipes/tel-format.pipe';
 import { FormsModule } from '@angular/forms';
 
 import { AddressAutocompleteComponent } from '../../components/address-autocomplete/address-autocomplete.component';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, CapitalizePipe, TelFormatPipe, AddressAutocompleteComponent],
+  imports: [CommonModule, FormsModule, CapitalizePipe, TelFormatPipe, AddressAutocompleteComponent, MaterialModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })

@@ -1,12 +1,29 @@
-<h2>Gázóra lejelentések</h2>
-<form (ngSubmit)="addReading()" #readingForm="ngForm">
-  <input type="number" [(ngModel)]="newMeterValue" name="meterValue" placeholder="Óraállás" required />
-  <button type="submit">Hozzáadás</button>
-</form>
-<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-<ul>
-  <li *ngFor="let reading of readings$ | async">
-    Dátum: {{ reading.date | date:'short' }} -
-    Óraállás: {{ reading.meterValue }}
-  </li>
-</ul>
+<div class="report-wrapper">
+  <mat-card class="report-card">
+    <h2>Gázóra lejelentések</h2>
+
+    <form (ngSubmit)="addReading()" #readingForm="ngForm" novalidate>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Óraállás</mat-label>
+        <input matInput type="number" [(ngModel)]="newMeterValue" name="meterValue" required />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="full-width">
+        Hozzáadás
+      </button>
+    </form>
+
+    <mat-error *ngIf="errorMessage" class="error-message">{{ errorMessage }}</mat-error>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <h3>Korábbi diktálások</h3>
+
+    <div *ngIf="readings$ | async as readings" class="reading-list">
+      <mat-card *ngFor="let reading of readings" class="reading-card">
+        <div class="reading-date">📅 {{ reading.date | date:'longDate' }}</div>
+        <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
+      </mat-card>
+    </div>
+  </mat-card>
+</div>

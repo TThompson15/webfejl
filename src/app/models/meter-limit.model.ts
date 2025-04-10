@@ -3,4 +3,3 @@ export interface MeterLimit {
     minValue: number;
     maxValue: number;
   }
-  
