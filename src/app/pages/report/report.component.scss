@@ -75,3 +75,28 @@ button.full-width {
     color: #333;
   }
 }
+
+.reading-card.highlight {
+  border-left-color: #ff9800;
+}
+
+.reading-card.recent {
+  border-left-color: #4caf50;
+}
+
+.empty-message {
+  text-align: center;
+  color: #757575;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.reading-card.monthly {
+  border-left: 4px solid #4caf50;
+  background-color: #e8f5e9;
+}
+
+.reading-card.lowest {
+  border-left: 4px solid #ff9800;
+  background-color: #fff3e0;
+}

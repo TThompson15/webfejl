@@ -25,5 +25,47 @@
         <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
       </mat-card>
     </div>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <h3>Szűrt diktálások (150 m³ felett)</h3>
+    <div *ngIf="filteredReadings$ | async as filtered" class="reading-list">
+      <mat-card *ngFor="let reading of filtered" class="reading-card highlight">
+        <div class="reading-date">📅 {{ reading.date | date:'longDate' }}</div>
+        <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
+      </mat-card>
+      <div *ngIf="filtered.length === 0" class="empty-message">Nincs 150 m³ feletti diktálás.</div>
+    </div>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <h3>Legutóbbi 3 diktálás</h3>
+    <div *ngIf="latestReadings$ | async as latest" class="reading-list">
+      <mat-card *ngFor="let reading of latest" class="reading-card recent">
+        <div class="reading-date">📅 {{ reading.date | date:'short' }}</div>
+        <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
+      </mat-card>
+      <div *ngIf="latest.length === 0" class="empty-message">Még nincs rögzített diktálás.</div>
+    </div>
+
+
+    <h3>Aktuális hónap diktálásai</h3>
+    <div *ngIf="readingsThisMonth$ | async as monthlyReadings" class="reading-list">
+      <mat-card *ngFor="let reading of monthlyReadings" class="reading-card monthly">
+        <div class="reading-date">📅 {{ reading.date | date:'longDate' }}</div>
+        <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
+      </mat-card>
+      <div *ngIf="monthlyReadings.length === 0" class="empty-message">Ebben a hónapban még nincs diktálás.</div>
+    </div>
+
+    <h3>Legkisebb 3 diktálás</h3>
+    <div *ngIf="lowestReadings$ | async as lowest" class="reading-list">
+      <mat-card *ngFor="let reading of lowest" class="reading-card lowest">
+        <div class="reading-date">📅 {{ reading.date | date:'short' }}</div>
+        <div class="reading-value">⛽ Óraállás: <strong>{{ reading.meterValue }}</strong> m³</div>
+      </mat-card>
+      <div *ngIf="lowest.length === 0" class="empty-message">Még nincs rögzített diktálás.</div>
+    </div>
+
   </mat-card>
 </div>

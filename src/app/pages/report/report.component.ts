@@ -16,12 +16,17 @@ import { MaterialModule } from '../../shared/material/material.module';
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.scss']
 })
-
 export class ReportComponent implements OnInit {
   readings$: Observable<GasReading[]>;
   newMeterValue!: number;
   errorMessage: string = '';
   lastMeterValue: number = 0;
+
+  filteredReadings$: Observable<GasReading[]> = new Observable();
+  latestReadings$: Observable<GasReading[]> = new Observable();
+  readingsThisMonth$: Observable<GasReading[]> = new Observable();
+  lowestReadings$: Observable<GasReading[]> = new Observable();
+
 
   constructor(
     private gasReadingService: GasReadingService,
@@ -32,13 +37,18 @@ export class ReportComponent implements OnInit {
     this.readings$ = this.gasReadingService.readings$;
   }
 
-
   ngOnInit(): void {
-    this.gasReadingService.readings$.subscribe(readings => {
+    this.readings$.subscribe(readings => {
       if (readings.length > 0) {
         this.lastMeterValue = Math.max(...readings.map(r => r.meterValue));
       }
     });
+
+    this.filteredReadings$ = this.gasReadingService.getReadingsAbove(150);
+    this.latestReadings$ = this.gasReadingService.getLatestReadings(3);
+    this.readingsThisMonth$ = this.gasReadingService.getReadingsThisMonth();
+    this.lowestReadings$ = this.gasReadingService.getLowestReadings(3);
+
   }
 
   addReading(): void {
@@ -67,18 +77,22 @@ export class ReportComponent implements OnInit {
       this.gasReadingService.addReading(newReading).then(() => {
         this.errorMessage = '';
         this.newMeterValue = 0;
-
+      
         this.toastService.show({
           type: 'success',
           message: 'Diktálás sikeres!',
           timestamp: new Date()
         });
-
+      
+        this.filteredReadings$ = this.gasReadingService.getReadingsAbove(150);
+        this.latestReadings$ = this.gasReadingService.getLatestReadings(3);
+        this.readingsThisMonth$ = this.gasReadingService.getReadingsThisMonth();
+        this.lowestReadings$ = this.gasReadingService.getLowestReadings(3);      
       }).catch((error) => {
         console.error('Hiba az adat hozzáadásakor:', error);
         this.errorMessage = 'Hiba az adat hozzáadásakor.';
       });
+      
     });
   }
-
 }
